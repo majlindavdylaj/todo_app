@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>602773698596-og8qs5ujfpt4ok6l9gksrnutffs3pahp.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCy_N-jafO9hB61T_vXaSK_pZmIIZE_Syw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>602773698596</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.todoApp</string>
+	<key>PROJECT_ID</key>
+	<string>facedetect-9e656</string>
+	<key>STORAGE_BUCKET</key>
+	<string>facedetect-9e656.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:602773698596:ios:8184ccd58cf62e89ba40b1</string>
+	<key>DATABASE_URL</key>
+	<string>https://facedetect-9e656.firebaseio.com</string>
+</dict>
+</plist>
