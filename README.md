@@ -1,6 +1,6 @@
 # todo_app
 
-TODO app with firebase and bloc
+TODO app with firebase and lindi
 
 ## Getting Started
 
