@@ -20,16 +20,16 @@ class FirestoreService {
     });
   }
 
-  Future<void> addTodo(Todo todo) {
-    return _todosCollection.add(todo.toJson());
+  Future<void> addTodo(Todo todo) async {
+    await _todosCollection.add(todo.toJson());
   }
 
-  Future<void> updateTodo(Todo todo) {
-    return _todosCollection.doc(todo.id).update(todo.toJson());
+  Future<void> updateTodo(Todo todo) async {
+    await _todosCollection.doc(todo.id).update(todo.toJson());
   }
 
-  Future<void> deleteTodo(String todoId) {
-    return _todosCollection.doc(todoId).delete();
+  Future<void> deleteTodo(String todoId) async {
+    await _todosCollection.doc(todoId).delete();
   }
 
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/bloc/todo/todo_bloc.dart';
-import 'package:todo_app/bloc/todo/todo_event.dart';
-import 'package:todo_app/bloc/todo/todo_state.dart';
+import 'package:lindi/lindi.dart';
+import 'package:todo_app/lindi/todo_viewmodel.dart';
 import 'package:todo_app/models/todo.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,55 +12,48 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  @override
-  void initState() {
-    BlocProvider.of<TodoBloc>(context).add(LoadTodos());
-    super.initState();
-  }
+  TodoViewModel todoViewModel = LindiInjector.get<TodoViewModel>()..loadTodo(true);
 
   @override
   Widget build(BuildContext context) {
-    final TodoBloc _todoBloc = BlocProvider.of<TodoBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Firestore'),
+        title: const Text('Firestore'),
       ),
-      body: BlocBuilder<TodoBloc, TodoState>(
-        builder: (context, state) {
-          if (state is TodoLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is TodoLoaded) {
-            final todos = state.todos;
-            return ListView.builder(
-              itemCount: todos.length,
-              itemBuilder: (context, index) {
-                final todo = todos[index];
-                return ListTile(
-                  title: Text(todo.title),
-                  leading: Checkbox(
-                    value: todo.completed,
-                    onChanged: (value) {
-                      final updatedTodo = todo.copyWith(completed: value);
-                      _todoBloc.add(UpdateTodo(updatedTodo));
-                    },
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      _todoBloc.add(DeleteTodo(todo.id));
-                    },
-                  ),
-                );
-              },
-            );
-          } else if (state is TodoOperationSuccess) {
-            _todoBloc.add(LoadTodos()); // Reload todos
-            return Container(); // Or display a success message
-          } else if (state is TodoError) {
-            return Center(child: Text(state.errorMessage));
-          } else {
-            return Container();
+      body: LindiBuilder(
+        viewModel: todoViewModel,
+        builder: (context) {
+          if(todoViewModel.hasError){
+            return Center(child: Text(todoViewModel.error!));
           }
+          if(todoViewModel.isLoading){
+            return const Center(child: CircularProgressIndicator());
+          }
+          if(todoViewModel.data!.isEmpty) {
+            return const Center(child: Text('Empty List'));
+          }
+          return ListView.builder(
+            itemCount: todoViewModel.data!.length,
+            itemBuilder: (context, index) {
+              final todo = todoViewModel.data![index];
+              return ListTile(
+                title: Text(todo.title),
+                leading: Checkbox(
+                  value: todo.completed,
+                  onChanged: (value) {
+                    final updatedTodo = todo.copyWith(completed: value);
+                    todoViewModel.updateTodo(updatedTodo);
+                  },
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    todoViewModel.deleteTodo(todo.id);
+                  },
+                ),
+              );
+            },
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -74,8 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   void _showAddTodoDialog(BuildContext context) {
-    final _titleController = TextEditingController();
-    final _descriptionController = TextEditingController();
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
     showDialog(
       context: context,
       builder: (context) {
@@ -84,11 +75,11 @@ class _HomeScreenState extends State<HomeScreen> {
           content: Column(
             children: [
               TextField(
-                controller: _titleController,
+                controller: titleController,
                 decoration: const InputDecoration(hintText: 'Todo title'),
               ),
               TextField(
-                controller: _descriptionController,
+                controller: descriptionController,
                 decoration: const InputDecoration(hintText: 'Todo description'),
               ),
             ],
@@ -105,11 +96,11 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 final todo = Todo(
                   id: DateTime.now().toString(),
-                  title: _titleController.text,
-                  description: _descriptionController.text,
+                  title: titleController.text,
+                  description: descriptionController.text,
                   completed: false,
                 );
-                BlocProvider.of<TodoBloc>(context).add(AddTodo(todo));
+                todoViewModel.addTodo(todo);
                 Navigator.pop(context);
               },
             ),

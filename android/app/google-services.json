@@ -3,7 +3,7 @@
     "project_number": "602773698596",
     "firebase_url": "https://facedetect-9e656.firebaseio.com",
     "project_id": "facedetect-9e656",
-    "storage_bucket": "facedetect-9e656.appspot.com"
+    "storage_bucket": "facedetect-9e656.firebasestorage.app"
   },
   "client": [
     {
